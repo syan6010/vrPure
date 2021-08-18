@@ -151,3 +151,9 @@ git commit -m "init commit" \\本地推送
 git push origin HEAD:"遠端branch名稱" \\推送到指定的遠端branch 
 ```
  
+設定remote
+```bash
+git remote add origin 遠端倉庫網址
+git branch -M main
+git push -u origin main
+```
