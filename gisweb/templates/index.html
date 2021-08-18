@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+     <title>政大地理資訊系統</title>
+
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+     <meta name="description" content="">
+     <meta name="keywords" content="">
+     <meta name="author" content="">
+     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+     {% load static %}
+     <!-- google font -->
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+     <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+     <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+     <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+     <!-- MAIN CSS -->
+     <link rel="stylesheet" href="{% static 'css/templatemo-digital-trend.css' %}">
+
+</head>
+<body>
+
+     <!-- MENU BAR -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/index">
+              <i class="fa fa-globe"></i> 
+              <!-- <img src="{% static 'images/nccu_logo.png' %}" /> -->
+              {% comment %} 政大地理資訊系統 {% endcomment %}
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        {% if request.user.is_authenticated%}
+                          <a href="" class="nav-link smoothScroll">{{user_name}} 您好</a>
+                        {% else %}
+                          <a href="" class="nav-link smoothScroll">訪客 您好</a> 
+                        {% endif %}                    
+                    </li>                  
+                    <li class="nav-item">
+                        <a href="/map_refine" class="nav-link smoothScroll">
+                        <i class="fa fa-map"></i>
+                        地圖
+                        </a>
+                    </li>
+                    {% comment %} <li class="nav-item">
+                        <a href="/map" class="nav-link smoothScroll">
+                        <i class="fa fa-map"></i>
+                        地圖
+                        </a>
+                    </li> {% endcomment %}
+                    <li class="nav-item">
+                        <a href="\blog" class="nav-link">
+                        <i class="fa fa-rss-square"></i>
+                        部落格
+                        </a>
+                    </li>
+                    {% if request.user.is_authenticated %}    
+                    <li class="nav-item dropdown">  <!-- 加上 dropdown, 表示擁有下一層收合展開的子選單 ********** -->
+                      <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        會員功能
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">  <!-- 子選單的 div ********** -->
+                        <a class="dropdown-item" href="\add">新增點位</a>
+                        <a class="dropdown-item" href="\user_blog">點位管理</a>
+                        <a class="dropdown-item" href="\logout" class="nav-link contact">登出</a>
+                      </div>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                    {% if request.user.is_authenticated %}                   
+
+                    {% else %}
+                        <a href="/login" class="nav-link contact">登入</a> 
+                    {% endif %}
+                     
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+
+     <section class="hero hero-bg d-flex justify-content-center align-items-center">
+               <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-6 col-md-10 col-12 d-flex flex-column justify-content-center align-items-center">
+                              <div class="hero-text">
+
+                                   <h1 class="text-white" data-aos="fade-up">歡迎使用政大地理資訊系統</h1>
+
+                                   <a href="/map_refine" class="custom-btn btn-bg btn mt-3" data-aos="fade-up" data-aos-delay="100">開始使用</a>
+
+                                 
+                              </div>
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                          <div class="hero-image" data-aos="fade-up" data-aos-delay="300">
+
+                            <img src="{% static 'images/nccu.png' %}" class="img-fluid" alt="working girl">
+                          </div>
+                        </div>
+
+                    </div>
+               </div>
+     </section>
+
+
+     <!-- ABOUT -->
+     <section class="about section-padding pb-0" id="about">
+          <div class="container">
+               <div class="row">
+                    <div class="col-lg-7 mx-auto col-md-10 col-12">
+                         <div class="about-info">
+
+                              <h2 class="mb-4" data-aos="fade-up">透過 <strong>地圖總覽</strong> 來和其他使用者一起共享有興趣的地點吧！</h2>
+
+                              <p class="mb-0" data-aos="fade-up">只要對特定的關鍵字進行選擇就能夠快速的針對不同種類的地點進行搜索！ 
+                              <br><br>點擊 <a href="\map">這裏</a> 開始你的地圖協作吧</p>
+                         </div>
+
+                         <div class="about-image" data-aos="fade-up" data-aos-delay="200">
+
+                          <img src="{% static 'images/office.png' %}" class="img-fluid" alt="office">
+                        </div>
+                    </div>
+
+               </div>
+          </div>
+     </section>
+
+
+ 
+
+     <!-- TESTIMONIAL -->
+     <section class="testimonial section-padding">
+          <div class="container">
+               <div class="row">
+
+                    <div class="col-lg-6 col-md-5 col-12">
+                        <div class="contact-image" data-aos="fade-up">
+
+                          <img src="{% static 'images/female-avatar.png' %}" class="img-fluid" alt="website">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-7 col-12">
+                      <h4 class="my-5 pt-3" data-aos="fade-up" data-aos-delay="100">簡潔直觀的部落格</h4>
+
+                      <div class="quote" data-aos="fade-up" data-aos-delay="200"></div>
+
+                      <h2 class="mb-4" data-aos="fade-up" data-aos-delay="300">使用部落格功能,快速尋找到你有興趣的主題與坐標，一起加入地圖協作的行列吧！</h2>
+
+                      {% comment %} <p data-aos="fade-up" data-aos-delay="400">
+                        <strong>Mary Zoe</strong>
+
+                        <span class="mx-1">/</span>
+
+                        <small>Digital Agency (CEO)</small>
+                      </p> {% endcomment %}
+                    </div>
+
+               </div>
+          </div>
+     </section>
+
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-5 mx-lg-auto col-md-8 col-10">
+            <h1 class="text-white" data-aos="fade-up" data-aos-delay="100">GIS專案 </h1>
+          </div>
+
+
+          <div class="col-lg-3 col-md-6 col-12" data-aos="fade-up" data-aos-delay="300">
+            <h4 class="my-4">Our Studio</h4>
+
+            <p class="mb-1">
+              <i class="fa fa-home mr-2 footer-icon"></i> 
+              政大地政系 
+            </p>
+          </div>
+
+          <div class="col-lg-4 mx-lg-auto text-center col-md-8 col-12" data-aos="fade-up" data-aos-delay="400">
+            <br>
+            <a rel="nofollow noopener" href="https://templatemo.com">Design: TemplateMo</a></p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+
+     <!-- SCRIPTS -->
+     <script src="{% static 'js/jquery.min.js' %}"></script>
+     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+     <script src="{% static 'js/aos.js' %}"></script>
+     <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+     <script src="{% static 'js/smoothscroll.js' %}"></script>
+     <script src="{% static 'js/custom.js' %}"></script>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+     <title>登入</title>
+<!--
+
+DIGITAL TREND
+
+https://templatemo.com/tm-538-digital-trend
+
+-->
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+     <meta name="description" content="">
+     <meta name="keywords" content="">
+     <meta name="author" content="">
+     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+     {% load static %}
+     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+     <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+     <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+     <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+
+     <!-- MAIN CSS -->
+     <link rel="stylesheet" href="{% static 'css/templatemo-digital-trend.css' %}">
+
+</head>
+<body>
+
+     <!-- MENU BAR -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/index">
+                <i class="fa fa-sign-in" aria-hidden="true"></i>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a href="/index" class="nav-link smoothScroll" >
+                        <i class="fa fa-backward"></i>
+                        回主頁
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/map" class="nav-link smoothScroll">
+                        <i class="fa fa-map"></i>
+                        地圖
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="blog.html" class="nav-link">
+                        <i class="fa fa-rss-square"></i>
+                        部落格
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/profileUpdate" class="nav-link">註冊</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+     <!-- BLOG -->
+     <section class="blog section-padding">
+          <div class="container">
+               <div class="row">
+
+                    <div class="col-lg-5 ml-auto mt-5 pt-5 col-md-6 col-12">
+
+                      <img src="{% static 'images/newsletter.png' %}" data-aos="fade-up" data-aos-delay="100" class="img-fluid" alt="newsletter">
+                    </div>
+
+                    <div class="col-lg-5 mr-auto mt-5 pt-5 col-md-6 col-12 newsletter-form">
+                      <h2 data-aos="fade-up" data-aos-delay="300">輸入你的帳號密碼來登入吧！</h2>
+                      <form action="" method="post" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <div class="form-group mt-4" data-aos="fade-up" data-aos-delay="400">
+                        <input name="username" type="text" class="form-control" 
+                        		id="username"  placeholder="帳號" minlength="5" required>
+                        <input name="password" type="password" class="form-control" 
+                        		id="password" placeholder="密碼" required>
+
+                        <small id="msg" class="form-text text-danger">{{message}}</small>
+
+                      </div>
+
+                      {% comment %} <div class="form-group form-check" data-aos="fade-up" data-aos-delay="500">
+                        <input name="monthly" type="checkbox" class="form-check-input" id="monthly">
+
+                        <label class="form-check-label" for="monthly">Please send me a monthly newsletter.</label>
+                      </div> {% endcomment %}
+
+                        <button type="submit" data-aos="fade-up" data-aos-delay="500" class="btn w-100 mt-3">登入</button>
+                      </form>
+                    </div>
+
+               </div>
+          </div>
+     </section>
+
+
+ 
+
+
+     <!-- SCRIPTS -->
+     <script src="{% static 'js/jquery.min.js' %}"></script>
+     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+     <script src="{% static 'js/aos.js' %}"></script>
+     <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+     <script src="{% static 'js/smoothscroll.js' %}"></script>
+     <script src="{% static 'js/custom.js' %}"></script>
+
+</body>
+</html>

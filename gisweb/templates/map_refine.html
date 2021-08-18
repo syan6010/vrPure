@@ -1,0 +1,183 @@
+<html>
+<head>
+    <title>NLSC地圖協作</title>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css"/>
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+
+    <!-- MAIN CSS -->
+    <link rel="stylesheet" href="{% static 'css/templatemo-digital-trend.css' %}">
+    <script src="{% static 'js/leaflet-osm.js' %}"></script>
+    <script src="{% static 'js/nlsc.js' %}"></script>
+    <style>
+        #map {
+            height: 100%;
+            width: 100%
+        }
+
+        /* css to customize Leaflet default styles  */
+        .leaflet-popup-tip,
+        .leaflet-popup-content-wrapper {
+            background: #0F9E87;
+            color: #ffffff;
+            max-width: 300;
+            max-height: 300;
+        }
+
+        .popupImage {
+            width: 100%;
+            max-width: 100;
+            max-height: 100;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+<!-- MENU BAR -->
+<nav class="navbar navbar-expand-lg position-absolute">
+    <div class="container">
+        {% if request.user.is_authenticated %}
+            <a href="\index" class="navbar-brand"> 地圖協作：{{ user_name }}</a>
+        {% else %}
+            <a href="\index" class="navbar-brand">地圖協作：訪客</a>
+        {% endif %}
+    </div>
+    </div>
+</nav>
+
+
+<!-- CONTACT -->
+<section class="section-padding">
+    <div class="container">
+        <form action="" method="POST" name="form1" id="form1">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="form-group col-md-9">
+                    <input type="text" class="form-control" name="title" placeholder="輸入要搜尋的關鍵字">
+                </div>
+                <div class="form-group col-md-2">
+                    <select class="form-control" name="type">
+                        {% for markerType in markerTypes %}
+                            <option>{{ markerType.title }}</option>
+                            {% empty %}
+                            <option>種類選擇</option>
+                            <option>建屋</option>
+                            <option>植物</option>
+                            <option>動物</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-1">
+                    <button type="submit" class="btn btn-primary">篩選</button>
+                </div>
+            </div>
+        </form>
+        {% comment %}
+            <div class="google-map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11196.961132529668!2d-43.38581128725845!3d-23.011063013218724!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9bdb695cd967b7%3A0x171cdd035a6a9d84!2sAv.%20L%C3%BAcio%20Costa%20-%20Barra%20da%20Tijuca%2C%20Rio%20de%20Janeiro%20-%20RJ%2C%20Brazil!5e0!3m2!1sen!2sth!4v1568649412152!5m2!1sen!2sth"
+                        width="1920" height="800" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+            </div>   {% endcomment %}
+        {% comment %}
+            <div id="map_div" style="height:600px; width:100%; border:1px solid black; allowfullscreen="";">
+            </div> {% endcomment %}
+    <div id="map"></div>
+    </div>
+</section>
+
+
+<!-- How to change your own map point
+1. Go to Google Maps
+2. Click on your location point
+3. Click "Share" and choose "Embed map" tab
+4. Copy only URL and paste it within the src="" field below
+-->
+
+
+<script>
+
+    var osm = new L.OSM.Mapnik();
+    var nlscmaps = [
+        new L.NLSC.PHOTO2({opacity: 0.7}),
+        new L.NLSC.B5000({opacity: 0.7}),
+        new L.NLSC.MB5000({opacity: 0.7}),
+        new L.NLSC.EMAP0({opacity: 0.7}),
+        new L.NLSC.EMAP1({opacity: 0.7}),
+        new L.NLSC.EMAP2({opacity: 0.7}),
+        new L.NLSC.EMAP({opacity: 0.7}),
+        new L.NLSC.LANDSECT({opacity: 0.7}),
+        new L.NLSC.Village({opacity: 0.7}),
+        new L.NLSC.LUIMAP({opacity: 0.7}),
+    ];
+
+    var baseMaps = {};
+    baseMaps["開放街圖"] = osm;
+    baseMaps["正射影像圖(通用版)"] = new L.NLSC.PHOTO2({opacity: 1});
+
+    var overlayMaps = {};
+    for (var i in nlscmaps) {
+        overlayMaps[nlscmaps[i].name] = nlscmaps[i];
+    }
+
+
+    var IconSytle = L.Icon.extend({
+        options: {
+            iconSize: [40, 40], // size of the icon
+            iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
+            shadowAnchor: [4, 62],  // the same for the shadow
+            popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+        }
+    });
+
+    var animal_icon = new IconSytle({iconUrl: "{% static 'images/animal.png' %}"});
+    var plant_icon = new IconSytle({iconUrl: "{% static 'images/plant.png' %}"});
+    var house_icon = new IconSytle({iconUrl: "{% static 'images/house.png' %}"});
+    var default_icon = new IconSytle({iconUrl: "{% static 'images/flag.png' %}"})
+
+    // set up the map
+    var map = new L.Map('map', {
+        center: new L.LatLng(25.00067043186134, 121.57625139421589),
+        zoom: 17,
+        layers: [baseMaps["正射影像圖(通用版)"], overlayMaps["通用版電子地圖透明"]],
+    })
+        .addControl(new L.Control.Scale())
+        .addControl(new L.Control.Layers(baseMaps, overlayMaps));
+
+    {% for item in all %}  //逐筆建立地標
+        {% if item.type == "建屋"%}
+            var use_icon = house_icon;
+        {% elif item.type == "植物"%}
+            var use_icon = plant_icon;
+        {% elif item.type == "動物"%}
+            var use_icon = animal_icon;
+        {% else %}
+            var use_icon = default_icon;
+        {% endif%}
+        var marker = L.marker([{{ item.lat }}, {{ item.lon }}], {icon: use_icon}).addTo(map);
+        marker.bindPopup("<strong>{{ item.title }}</strong> <br>種類：{{ item.type }} <br>{{ item.content|slice:":10" }}... <br> 發佈者： {{ item.username }}。 <br> 日期： {{ item.create_at|date:"Y / m / d" }}。<br> <img src='{{ item.purl }}' class=popupImage>").openPopup();
+    {% endfor %}
+
+</script>
+
+<!-- SCRIPTS -->
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/aos.js' %}"></script>
+<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+<script src="{% static 'js/smoothscroll.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+</body>
+</html>
