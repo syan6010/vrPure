@@ -56,7 +56,7 @@
                                     <h3>
                                         <label class="btn btn-info">
                                             <input id="avatarSelect" style="display:none;" type="file" name="avaImg"
-                                                   required>
+                                                   required accept=".jpeg, .jpg">
                                             <i class="fa fa-photo"></i> 上傳圖片
                                         </label>
                                     </h3>
@@ -64,10 +64,10 @@
                             </div>
                         </div>
                 </form>
-
             </div>
         </div>
     </section>
+
 {% endblock content %}
 
 {% block extra_js %}
@@ -90,8 +90,7 @@
                 try {
                     lon = exif.longitude;
                     lat = exif.latitude;
-                }
-                catch (e) {
+                } catch (e) {
                     lon = 0;
                     lat = 0;
                 }

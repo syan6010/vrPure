@@ -1,65 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+{% extends  "base.html" %}
+{% load static %}
+{% block title %}注冊{% endblock title %}
+{% block content %}
 
-     <title>注冊</title>
-<!--
-
-DIGITAL TREND
-
-https://templatemo.com/tm-538-digital-trend
-
--->
-     <meta charset="UTF-8">
-     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-     <meta name="description" content="">
-     <meta name="keywords" content="">
-     <meta name="author" content="">
-     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-     {% load static %}
-     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
-     <link rel="stylesheet" href="{% static 'css/aos.css' %}">
-     <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
-     <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
-
-     <!-- MAIN CSS -->
-     <link rel="stylesheet" href="{% static 'css/templatemo-digital-trend.css' %}">
-
-</head>
-<body>
-
-     <!-- MENU BAR -->
+    <!-- MENU BAR -->
     <nav class="navbar navbar-expand-lg position-absolute">
         <div class="container">
             <a class="navbar-brand" href="/index">
-              <i class="fa fa-user-plus" aria-hidden="true"></i>
+                <i class="fa fa-user-plus" aria-hidden="true"></i>
             </a>
 
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-                aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false"
+                    aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a href="/index" class="nav-link smoothScroll" >
-                        <i class="fa fa-backward"></i>
-                        回主頁
+                        <a href="/index" class="nav-link smoothScroll">
+                            <i class="fa fa-backward"></i>
+                            回主頁
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="/map" class="nav-link smoothScroll">
-                        <i class="fa fa-map"></i>
-                        地圖
+                            <i class="fa fa-map"></i>
+                            地圖
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="blog.html" class="nav-link">
-                        <i class="fa fa-rss-square"></i>
-                        部落格
+                            <i class="fa fa-rss-square"></i>
+                            部落格
                         </a>
                     </li>
                     <li class="nav-item">
@@ -71,60 +45,50 @@ https://templatemo.com/tm-538-digital-trend
     </nav>
 
 
-     <!-- BLOG -->
-     <section class="blog section-padding">
-          <div class="container">
-               <div class="row">
+    <!-- BLOG -->
+    <section class="blog section-padding">
+        <div class="container">
+            <div class="row">
 
-                    <div class="col-lg-5 ml-auto mt-5 pt-5 col-md-6 col-12">
+                <div class="col-lg-5 ml-auto mt-5 pt-5 col-md-6 col-12">
 
-                      <img src="{% static 'images/login.png' %}" data-aos="fade-up" data-aos-delay="100" class="img-fluid" alt="newsletter">
-                    </div>
+                    <img src="{% static 'images/login.png' %}" data-aos="fade-up" data-aos-delay="100" class="img-fluid"
+                         alt="newsletter">
+                </div>
 
-                    <div class="col-lg-5 mr-auto mt-5 pt-5 col-md-6 col-12 newsletter-form">
-                      <h2 data-aos="fade-up" data-aos-delay="300">快速創建你的帳號</h2>
-                      <form action="" method="post" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <div class="form-group mt-4" data-aos="fade-up" data-aos-delay="400">
-                        <input name="email" type="email" class="form-control" 
-                        		id="email" placeholder="輸入電子信箱" required>
-                        <input name="username" type="text" class="form-control" 
-                        		id="username"  placeholder="建構您的使用者ID(做日後帳號登入使用)" minlength="5" required>
-                        <input name="password" type="password" class="form-control" 
-                        		id="password" placeholder="建構密碼" required>
+                <div class="col-lg-5 mr-auto mt-5 pt-5 col-md-6 col-12 newsletter-form">
+                    <h2 data-aos="fade-up" data-aos-delay="300">快速創建你的帳號</h2>
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group mt-4" data-aos="fade-up" data-aos-delay="400">
+                            <input name="email" type="email" class="form-control"
+                                   id="email" placeholder="輸入電子信箱" required>
+                            <input name="username" type="text" class="form-control"
+                                   id="username" placeholder="建構您的使用者ID(做日後帳號登入使用)" minlength="5" required>
+                            <input name="password" type="password" class="form-control"
+                                   id="password" placeholder="建構密碼" required>
 
-                        {% comment %} <input name="password" type="password" class="form-control" 
-                        		id="confirm_password" placeholder="密碼確認" required> {% endcomment %}
+                            {% comment %} <input name="password" type="password" class="form-control"
+                                                 id="confirm_password" placeholder="密碼確認" required> {% endcomment %}
 
-                        <small id="msg" class="form-text text-danger">{{message}}</small>
+                            <small id="msg" class="form-text text-danger">{{ message }}</small>
 
-                      </div>
+                        </div>
 
-                      {% comment %} <div class="form-group form-check" data-aos="fade-up" data-aos-delay="500">
-                        <input name="monthly" type="checkbox" class="form-check-input" id="monthly">
+                        {% comment %}
+                            <div class="form-group form-check" data-aos="fade-up" data-aos-delay="500">
+                                <input name="monthly" type="checkbox" class="form-check-input" id="monthly">
 
-                        <label class="form-check-label" for="monthly">Please send me a monthly newsletter.</label>
-                      </div> {% endcomment %}
+                                <label class="form-check-label" for="monthly">Please send me a monthly
+                                    newsletter.</label>
+                            </div> {% endcomment %}
 
-                        <button type="submit" data-aos="fade-up" data-aos-delay="500" class="btn w-100 mt-3">免費注冊</button>
-                      </form>
-                    </div>
+                        <button type="submit" data-aos="fade-up" data-aos-delay="500" class="btn w-100 mt-3">免費注冊
+                        </button>
+                    </form>
+                </div>
 
-               </div>
-          </div>
-     </section>
-
-
- 
-
-
-     <!-- SCRIPTS -->
-     <script src="{% static 'js/jquery.min.js' %}"></script>
-     <script src="{% static 'js/bootstrap.min.js' %}"></script>
-     <script src="{% static 'js/aos.js' %}"></script>
-     <script src="{% static 'js/owl.carousel.min.js' %}"></script>
-     <script src="{% static 'js/smoothscroll.js' %}"></script>
-     <script src="{% static 'js/custom.js' %}"></script>
-
-</body>
-</html>
+            </div>
+        </div>
+    </section>
+{% endblock %}

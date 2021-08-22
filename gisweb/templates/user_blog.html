@@ -1,31 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-
-    <title>點位管理</title>
-    <!--
-
-    DIGITAL TREND
-
-    https://templatemo.com/tm-538-digital-trend
-
-    -->
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-    <meta name="description" content="">
-    <meta name="keywords" content="">
-    <meta name="author" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
-    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
-
-    <!-- MAIN CSS -->
-    <link rel="stylesheet" href="{% static 'css/templatemo-digital-trend.css' %}">
+{% extends  "base.html" %}
+{% load static %}
+{% block title %}新增頁面{% endblock title %}
+{% block css %}
     <link rel="stylesheet" href="{% static 'css/modern-card.css' %}">
     <style>
         img {
@@ -34,54 +10,12 @@
             object-fit: cover;
         }
     </style>
+{% endblock css %}
+{% block content %}
 
-</head>
-<body>
-
-<nav class="navbar navbar-expand-lg">
-    <div class="container">
-        <a class="navbar-brand" href="/index">
-            {{ user_name }}的點位
-        </a>
-
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false"
-                aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                {% if request.user.is_authenticated %}
-                    <li class="nav-item dropdown">  <!-- 加上 dropdown, 表示擁有下一層收合展開的子選單 ********** -->
-                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                            會員功能
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <!-- 子選單的 div ********** -->
-                            <a class="dropdown-item" href="\add">新增點位</a>
-                            <a class="dropdown-item" href="/logout">登出</a>
-                        </div>
-                    </li>
-                {% endif %}
-                <li class="nav-item">
-                    <!-- {% if request.user.is_authenticated %}                   
-                        <a href="/logout" class="nav-link contact">登出</a>
-                    {% else %}
-                        <a href="/login" class="nav-link contact">登入</a> 
-                    {% endif %} -->
-
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-
-<!-- BLOG -->
-<section class="blog">
-    <!-- <div class="container">
+    <!-- BLOG -->
+    <section class="blog">
+        <!-- <div class="container">
               {% for item in all %}
                <div class="row">
                     <div class="container-fluid tm-container-content tm-mt-60 mb-5">
@@ -96,74 +30,65 @@
                </div>
                {% endfor %}
           </div> -->
-    <div class="container-fluid">
-        <div class="row my-2">
-            <div class="col-md-12">
-                <div class="row">
-                    {% for item in all %}
-                        {% if forloop.counter0|divisibleby:3 %}</div>
-                            <div class="row my-5"> {% endif %}
-                        <div class="col-md-4">
-                            <div class="card card-blog">
-                                <div class="card-img">
-                                    <div id='vrview{{ forloop.counter0 }}'></div>
-                                </div>
-                                <div class="table">
-                                    <h6 class="category text-success">
-                                        {% if item.type == "建屋" %}
-                                            <i class="fa fa-home"></i>
-                                        {% elif item.type == "植物" %}
-                                            <i class="fa fa-leaf"></i>
-                                        {% elif item.type == "動物" %}
-                                            <i class="fa fa-tripadvisor"></i>
-                                        {% else %}
-                                            <i class="fa fa-heart"></i>
-                                        {% endif %}
-                                        {{ item.type }}
-                                    </h6>
-                                    <h4 class="card-caption">{{ item.title }}</h4>
-                                    <p class="card-description text-info">{{ item.username }}</p>
-                                    <hr>
-                                    <p class="card-description">
-                                        {{ item.content }}
-                                    </p>
-                                    <a href="/modify/{{ item.id }}" class="btn btn-warning btn-round"> <i
-                                            class="fa fa-cogs"></i> 點位修改
-                                        <div class="ripple-container"></div>
-                                    </a>
+        <div class="container-fluid">
+            <div class="row my-2">
+                <div class="col-md-12">
+                    <div class="row">
+                        {% for item in all %}
+                            {% if forloop.counter0|divisibleby:3 %}</div>
+                                <div class="row my-5"> {% endif %}
+                            <div class="col-md-4">
+                                <div class="card card-blog">
+                                    <div class="card-img">
+                                        <div id='vrview{{ forloop.counter0 }}'></div>
+                                    </div>
+                                    <div class="table">
+                                        <h6 class="category text-success">
+                                            {% if item.type == "建屋" %}
+                                                <i class="fa fa-home"></i>
+                                            {% elif item.type == "植物" %}
+                                                <i class="fa fa-leaf"></i>
+                                            {% elif item.type == "動物" %}
+                                                <i class="fa fa-tripadvisor"></i>
+                                            {% else %}
+                                                <i class="fa fa-heart"></i>
+                                            {% endif %}
+                                            {{ item.type }}
+                                        </h6>
+                                        <h4 class="card-caption">{{ item.title }}</h4>
+                                        <p class="card-description text-info">{{ item.username }}</p>
+                                        <hr>
+                                        <p class="card-description">
+                                            {{ item.content }}
+                                        </p>
+                                        <a href="/modify/{{ item.id }}" class="btn btn-warning btn-round"> <i
+                                                class="fa fa-cogs"></i> 點位修改
+                                            <div class="ripple-container"></div>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
+                        {% endfor %}
                         </div>
-                    {% endfor %}
-                    </div>
+                </div>
             </div>
-        </div>
-</section>
+    </section>
+{% endblock content %}
+{% block extra_js %}
+    <script src="https://storage.googleapis.com/vrview/2.0/build/vrview.min.js"></script>
+    <script>
 
+        window.addEventListener('load', onVrViewLoad);
 
-<!-- SCRIPTS -->
-<script src="{% static 'js/jquery.min.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
-<script src="{% static 'js/aos.js' %}"></script>
-<script src="{% static 'js/owl.carousel.min.js' %}"></script>
-<script src="{% static 'js/smoothscroll.js' %}"></script>
-<script src="{% static 'js/custom.js' %}"></script>
-<script src="https://storage.googleapis.com/vrview/2.0/build/vrview.min.js"></script>
-<script>
-
-    window.addEventListener('load', onVrViewLoad);
-
-    function onVrViewLoad() {
-        // Selector '#vrview' finds element with id 'vrview'.
-        {% for item in all %}
-            new VRView.Player('#vrview{{ forloop.counter0 }}', {
-                width: "100%",
-                height: "300px",
-                image: '{{ item.purl }}',
-            });
-        {% endfor %}
-    }
-</script>
-
-</body>
-</html>
+        function onVrViewLoad() {
+            // Selector '#vrview' finds element with id 'vrview'.
+            {% for item in all %}
+                new VRView.Player('#vrview{{ forloop.counter0 }}', {
+                    width: "100%",
+                    height: "300px",
+                    image: '{{ item.purl }}',
+                });
+            {% endfor %}
+        }
+    </script>
+{% endblock extra_js %}

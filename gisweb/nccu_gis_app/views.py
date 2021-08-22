@@ -13,6 +13,7 @@ import logging
 from PIL import Image
 import exifread
 import json
+
 import uuid
 import firebase_admin
 from firebase_admin import credentials
@@ -60,105 +61,7 @@ def index(request):
     return render(request, "index.html", locals())
 
 
-@csrf_exempt
 def add(request):
-    # all=maplist.objects.all()  #取得所有景點
-    all = markerType.objects.all()  # 取得所有景點
-    if ('title' in request.POST):
-        try:
-            logger.debug('run')
-            aTitle = request.POST['title']
-            aContent = request.POST['content']
-            aType = request.POST['type']
-            # apurl = request.FILES.get('purl', False)
-            apurl = request.POST['purl']
-            lon = request.POST['lon']
-            lat = request.POST['lat']
-            user_name = request.user.username
-            logger.debug(apurl)
-            # fs = FileSystemStorage()
-            # filename = fs.save(apurl.name , apurl)
-            # path_name = "media/{}".format(apurl)
-            basename = apurl.split('.')[0]
-            logger.debug(basename)
-            logger.debug("flag1")
-            path_name = "media/preImg/{}".format(apurl)
-            try:
-                exif = get_exif(path_name)
-                try:
-                    width = exif[imgWidthId]
-                    height = exif[imgLengthId]
-                except:
-                    width = exif[pixelDix]
-                    height = exif[pixelDiy]
-
-                new_w = int(width / 5)
-                new_h = int(height / 5)
-                img = Image.open(path_name)
-                rsize_img = img.resize((new_w, new_h))
-                # gpsInfo = exif[gpsTagId]
-                orientation = exif[orientationId]
-                logger.debug("ans: {}".format(orientation))
-                if (orientation == 6):
-                    ori_img = rsize_img.transpose(Image.ROTATE_270)
-                    ori_img.save('media/reImg/re_{}'.format(apurl), 'JPEG')
-                    new_h, new_w = new_w, new_h
-                    print('90')
-                elif (orientation == 8):
-                    ori_img = rsize_img.transpose(Image.ROTATE_90)
-                    ori_img.save('media/reImg/re_{}'.format(apurl), 'JPEG')
-                    new_h, new_w = new_w, new_h
-                    print('270')
-                elif (orientation == 2):
-                    ori_img = rsize_img.transpose(Image.FLIP_LEFT_RIGHT)
-                    ori_img.save('media/reImg/re_{}'.format(apurl), 'JPEG')
-                    print('180')
-                elif (orientation == 4):
-                    ori_img = rsize_img.transpose(Image.FLIP_TOP_BOTTOM)
-                    ori_img.save('media/reImg/re_{}'.format(apurl), 'JPEG')
-                    print('180')
-                elif (orientation == 5):
-                    ori_img = rsize_img.transpose(Image.FLIP_LEFT_RIGHT)
-                    ori_img_f = rsize_img.transpose(Image.ROTATE_90)
-                    ori_img_f.save('media/reImg/re_{}'.format(apurl), 'JPEG')
-                    print('180')
-                elif (orientation == 7):
-                    ori_img = rsize_img.transpose(Image.FLIP_LEFT_RIGHT)
-                    ori_img_f = rsize_img.transpose(Image.ROTATE_270)
-                    ori_img_f.save('media/reImg/re_{}'.format(apurl), 'JPEG')
-                    print('180')
-                elif (orientation == 3):
-                    ori_img = rsize_img.transpose(Image.ROTATE_180)
-                    ori_img.save('media/reImg/re_{}'.format(apurl), 'JPEG')
-                    print('180')
-                else:
-                    rsize_img.save('media/reImg/re_{}'.format(apurl), 'JPEG')
-                    print('else')
-            except:
-                img = Image.open(path_name)
-                logger.debug("flag2: {}".format(img.height))
-                new_w = int(img.width / 5)
-                new_h = int(img.height / 5)
-                rsize_img = img.resize((new_w, new_h))
-                logger.debug("flag3: {}".format(rsize_img.width))
-                rsize_img.save('media/reImg/re_{}'.format(apurl))
-            # gpsInfo = exif[gpsTagId]
-            # lat_str = gpsInfo[2]
-            # lat = format_lat_lon(lat_str)
-            # lon_str = gpsInfo[4]
-            # lon = format_lat_lon(lon_str)
-            rec = imgData(title=aTitle, content=aContent, type=aType,
-                          purl=apurl, lon=lon, lat=lat, username=user_name)
-            rec.save()
-            return render(request, "index.html")
-
-        except:
-            return redirect('/error/')
-    else:
-        return render(request, "add_refine.html", locals())
-
-
-def add_refine(request):
     all = markerType.objects.all()  # 取得所有景點
     if ('title' in request.POST):
         try:
@@ -172,6 +75,21 @@ def add_refine(request):
             user_name = request.user.username
             filename = "%s" % (uuid.uuid4())
 
+            im = Image.open(avaImg)
+
+            width, height = im.size
+
+            # reduce to 30% of the original size
+            target_size_percent = 30
+            new_width = int(width * target_size_percent / 100)
+            new_height = int(height * target_size_percent / 100)
+            new_size = (new_width, new_height)
+            im = im.resize(new_size)
+            avaImg.seek(0)
+            im.save(avaImg, "jpeg")
+            avaImg.seek(0)
+            logger.debug("長寬：{}".format(avaImg.size))
+
             blob = Blob(filename, bucket)
             blob.upload_from_file(avaImg, content_type='image/jpeg')
             blob.make_public()
@@ -182,7 +100,8 @@ def add_refine(request):
             rec.save()
             return render(request, "index.html")
 
-        except:
+        except Exception as e:
+            logger.debug("error: {}".format(e))
             return redirect('/error/')
     else:
         return render(request, "add_refine.html", locals())
@@ -190,18 +109,19 @@ def add_refine(request):
 
 def map(request):
     user_name = request.user.username
+    markerTypes = markerType.objects.all()
     if request.method == "POST":
         getTitle = request.POST['title']
         getType = request.POST['type']
         all = imgData.objects.filter(title__contains="{}".format(
             getTitle), type="{}".format(getType))
-        return render(request, "map.html", locals())
+        return render(request, "map_refine.html", locals())
     else:
         if request.user.is_authenticated:
             all = imgData.objects.filter(username="{}".format(user_name))
         else:
             all = imgData.objects.all()  # 取得所有景點
-        return render(request, "map.html", locals())
+        return render(request, "map_refine.html", locals())
 
 
 def login(request):
@@ -245,23 +165,6 @@ def error(request):
     return render(request, "error.html")
 
 
-def map_refine(request):
-    user_name = request.user.username
-    markerTypes = markerType.objects.all()
-    if request.method == "POST":
-        getTitle = request.POST['title']
-        getType = request.POST['type']
-        all = imgData.objects.filter(title__contains="{}".format(
-            getTitle), type="{}".format(getType))
-        return render(request, "map_refine.html", locals())
-    else:
-        if request.user.is_authenticated:
-            all = imgData.objects.filter(username="{}".format(user_name))
-        else:
-            all = imgData.objects.all()  # 取得所有景點
-        return render(request, "map_refine.html", locals())
-
-
 def modify(request, editid=None, deletetype=None):  # 修改景點資料
     user_name = request.user.username
     item = imgData.objects.get(id=editid)
@@ -276,12 +179,12 @@ def modify(request, editid=None, deletetype=None):  # 修改景點資料
         return redirect('/user_blog/')
     else:
         if deletetype == 'delete':  # 刪除相片
-            file_path_pre = "media/preImg/{}".format(item.purl)
-            file_path_refine = "media/reImg/re_{}".format(item.purl)
+            logger.debug(item.purl.split('https://storage.googleapis.com/webgisapi.appspot.com/')[1])
+            photoId = item.purl.split('https://storage.googleapis.com/webgisapi.appspot.com/')[1]
             try:
-                os.remove(file_path_pre)
-                os.remove(file_path_refine)
-            except OSError as e:
+                blob = bucket.blob(photoId)
+                blob.delete()
+            except Exception as e:
                 print(e)
             else:
                 print("File is deleted successfully")
@@ -295,124 +198,7 @@ def blog(request):
     return render(request, "blog.html", locals())
 
 
-def blog_detail(request, pk):
-    item = imgData.objects.get(id=pk)
-    return render(request, "blog-detail.html", locals())
-
-
 def user_blog(request):
     user_name = request.user.username
     all = imgData.objects.filter(username="{}".format(user_name))
     return render(request, "user_blog.html", locals())
-
-
-def add_lonlat(request):  # 登出
-    return render(request, "add_lonlat.html", locals())
-
-
-def decodeImage(bytesIo, filename):
-    try:
-        fmt = whatimage.identify_image(bytesIo)
-        if fmt in ['heic']:
-            i = pyheif.read_heif(bytesIo)
-            pi = Image.frombytes(mode=i.mode, size=i.size, data=i.data)
-            for metadata in i.metadata or []:
-                if metadata['type'] == 'Exif':
-                    exif_dict = piexif.load(metadata['data'])
-            exif_dict['0th'][274] = 0
-            exif_bytes = piexif.dump(exif_dict)
-            img_url = "media/preImg/{}.jpg".format(filename.split('.')[0])
-            basename = "{}.jpg".format(filename.split('.')[0])
-            pi.save(img_url, format="jpeg", exif=exif_bytes)
-            return basename
-        else:
-            return filename
-    except:
-        traceback.print_exc()
-
-
-def read_image_file_rb(file_path):
-    with open(file_path, 'rb') as f:
-        file_data = f.read()
-    return file_data
-
-
-def upload_avatar(request):
-    file_obj = request.FILES.get('avatar')
-    # file_path = os.path.join('media/preImg', file_obj.name)
-    filename = "%s%s" % (uuid.uuid4(), file_obj.name)
-    file_path = "media/preImg/{}".format(filename)
-    with open(file_path, 'wb') as f:
-        for chunk in file_obj.chunks():
-            f.write(chunk)
-    # fs = FileSystemStorage()
-    # filename = fs.save(file_obj.name , file_obj)
-    try:
-        exif = get_exif(file_path)
-        gpsInfo = exif[gpsTagId]
-        lat_str = gpsInfo[2]
-        lat = format_lat_lon(lat_str)
-        lon_str = gpsInfo[4]
-        lon = format_lat_lon(lon_str)
-    except:
-        lon = 0
-        lat = 0
-    # response_data = {}
-    # response_data['basename'] = file_obj.name
-    # response_data['lat'] = lat
-    # response_data['lon'] = lon
-    return JsonResponse({'basename': filename, 'lon': lon, 'lat': lat})
-    # return HttpResponse(file_obj.name)
-
-
-# 使用的時候用這裏替換上面的upload_avatar才可以處理heic
-# def upload_avatar(request):
-# 	file_obj = request.FILES.get('avatar')
-# 	# file_path = os.path.join('media/preImg', file_obj.name)
-# 	filename = "%s%s" % (uuid.uuid4(), file_obj.name)
-# 	file_path = "media/preImg/{}".format(filename)
-# 	with open(file_path, 'wb') as f:
-# 		for chunk in file_obj.chunks():
-# 			f.write(chunk)
-# 	data = read_image_file_rb(file_path)
-# 	basename = decodeImage(data, filename)
-# 	logger.debug(basename)
-# 	re_filename = "media/preImg/{}".format(basename)
-
-
-# 	try:
-# 		exif = get_exif(re_filename)
-# 		gpsInfo = exif[gpsTagId]
-# 		lat_str = gpsInfo[2]
-# 		lat = format_lat_lon(lat_str)
-# 		lon_str = gpsInfo[4]
-# 		lon = format_lat_lon(lon_str)
-# 	except:
-# 		lon = 0
-# 		lat = 0
-
-# 	# fs = FileSystemStorage()
-# 	# filename = fs.save(file_obj.name , file_obj)
-
-# 	# response_data = {}
-# 	# response_data['basename'] = file_obj.name
-# 	# response_data['lat'] = lat
-# 	# response_data['lon'] = lon
-# 	return JsonResponse({'basename': basename, 'lon': lon, 'lat': lat})
-# 	# return HttpResponse(file_obj.name)
-
-
-# Create your views here.
-def get_exif(filename):
-    image = Image.open(filename)
-    image.verify()
-    return image._getexif()
-
-
-def format_lat_lon(data):
-    dd = float(data[0])
-    mm = float(data[1]) / 60
-    ss = float(data[2]) / 3600
-
-    result = dd + mm + ss
-    return result
