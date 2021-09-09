@@ -98,6 +98,7 @@ def add(request):
             rec = imgData(title=aTitle, content=aContent, type=aType,
                           purl=url, lon=lon, lat=lat, username=user_name)
             rec.save()
+            messages.success(request, "成功新增内容");
             return render(request, "index.html")
 
         except Exception as e:
@@ -133,6 +134,7 @@ def login(request):
         if user1 is not None:  # 驗證通過
             if user1.is_active:  # 帳號有效
                 auth.login(request, user1)  # 登入
+                messages.success(request, "{}成功登入".format(name));
                 return redirect('/index/')  # 開啟管理頁面
             else:  # 帳號無效
                 message = '帳號尚未啟用！'
@@ -143,6 +145,7 @@ def login(request):
 
 def logout(request):  # 登出
     auth.logout(request)
+    messages.success(request, "成功登出");
     return redirect('/index/')
 
 
@@ -189,6 +192,7 @@ def modify(request, editid=None, deletetype=None):  # 修改景點資料
             else:
                 print("File is deleted successfully")
             item.delete()  # 從資料庫移除
+            messages.success(request, "成功刪除内容");
             return redirect('/user_blog/')
         return render(request, "modify.html", locals())
 

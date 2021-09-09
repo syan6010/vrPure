@@ -1,37 +1,11 @@
-{% extends  "base.html" %}
+{% extends  "base_blog.html" %}
 {% load static %}
 {% block title %}新增頁面{% endblock title %}
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/modern-card.css' %}">
 {% endblock %}
 {% block content %}
-
-    <div class="container-fluid">
-    <!-- <div class="row">
-          <form action="" method="POST" name="form1" id="form1" class="form-inline mx-auto">
-            {% csrf_token %}
-            <div class="form-row mx-5 mt-5">
-                <div class="form-group col-auto">
-                    <input type="text" class="form-control" name="title" placeholder="輸入要搜尋的關鍵字">
-                </div>
-                <div class="form-group col-auto">
-                    <select class="form-control" name="type">
-                    {% for markerType in markerTypes%}
-                    <option>{{ markerType.title }}</option>
-                    {% empty %}
-                        <option>種類選擇</option>
-                        <option>建屋</option>
-                        <option>植物</option>
-                        <option>動物</option>
-                    {% endfor %}
-                    </select>
-                </div>
-                <div class="form-group col-auto">
-                    <button type="submit" class="btn btn-primary">篩選</button>
-                </div>
-            </div>
-        </form>
-        </div> -->
+<div class="container">
     <div class="row my-2">
         <div class="col-md-12">
             <div class="row">
@@ -70,6 +44,7 @@
                 </div>
         </div>
     </div>
+</div>
 {% endblock content %}
 {% block extra_js %}
     <script src="https://storage.googleapis.com/vrview/2.0/build/vrview.min.js"></script>

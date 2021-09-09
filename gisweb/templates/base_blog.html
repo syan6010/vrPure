@@ -53,47 +53,10 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    {% if request.user.is_authenticated %}
-                        <a href="" class="nav-link smoothScroll">{{ user_name }} 您好</a>
-                    {% else %}
-                        <a href="" class="nav-link smoothScroll">訪客 您好</a>
-                    {% endif %}
-                </li>
-                <li class="nav-item">
-                    <a href="/map" class="nav-link smoothScroll">
-                        <i class="fa fa-map"></i>
-                        地圖
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="\blog" class="nav-link">
-                        <i class="fa fa-rss-square"></i>
-                        部落格
-                    </a>
-                </li>
-                {% if request.user.is_authenticated %}
-                    <li class="nav-item dropdown">  <!-- 加上 dropdown, 表示擁有下一層收合展開的子選單 ********** -->
-                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                            會員功能
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <!-- 子選單的 div ********** -->
-                            <a class="dropdown-item" href="\add">新增點位</a>
-                            <a class="dropdown-item" href="\user_blog">點位管理</a>
-                            <a class="dropdown-item" href="\logout" class="nav-link contact">登出</a>
-                        </div>
-                    </li>
-                {% endif %}
-                <li class="nav-item">
-                    {% if request.user.is_authenticated %}
-
-                    {% else %}
-                        <a href="/login" class="nav-link contact">登入</a>
-                    {% endif %}
-
-                </li>
+                <a href="\index" class="nav-link smoothScroll">
+                    <i class="fa fa-backward" aria-hidden="true"></i>
+                    回首頁
+                </a>
             </ul>
         </div>
     </div>

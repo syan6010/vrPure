@@ -1,4 +1,4 @@
-{% extends  "base.html" %}
+{% extends  "base_blog.html" %}
 {% load static %}
 {% block title %}新增頁面{% endblock title %}
 {% block css %}
@@ -15,22 +15,7 @@
 
     <!-- BLOG -->
     <section class="blog">
-        <!-- <div class="container">
-              {% for item in all %}
-               <div class="row">
-                    <div class="container-fluid tm-container-content tm-mt-60 mb-5">
-                      <div class="blog-header">
-                        <img src='/media/reImg/re_{{ item.purl }}' class="img-fluid" alt="blog header">
-                        <div class="blog-header-info">
-                          <h4 class="blog-category text-info">{{item.type}}</h4>
-                        <h3><a href="/modify/{{ item.id }}">{{item.title}}</a></h3>
-                        </div>
-                      </div>
-                    </div>
-               </div>
-               {% endfor %}
-          </div> -->
-        <div class="container-fluid">
+        <div class="container">
             <div class="row my-2">
                 <div class="col-md-12">
                     <div class="row">
