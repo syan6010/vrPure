@@ -39,7 +39,7 @@
 <!-- MENU BAR -->
 <nav class="navbar navbar-expand-lg">
     <div class="container">
-        <a class="navbar-brand" href="/index">
+        <a class="navbar-brand" href="/">
             <i class="fa fa-globe"></i>
             <!-- <img src="{% static 'images/nccu_logo.png' %}" /> -->
             {% comment %} 政大地理資訊系統 {% endcomment %}
@@ -53,13 +53,6 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    {% if request.user.is_authenticated %}
-                        <a href="" class="nav-link smoothScroll">{{ user_name }} 您好</a>
-                    {% else %}
-                        <a href="" class="nav-link smoothScroll">訪客 您好</a>
-                    {% endif %}
-                </li>
                 <li class="nav-item">
                     <a href="/map" class="nav-link smoothScroll">
                         <i class="fa fa-map"></i>
@@ -76,7 +69,7 @@
                     <li class="nav-item dropdown">  <!-- 加上 dropdown, 表示擁有下一層收合展開的子選單 ********** -->
                         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
-                            會員功能
+                            管理
                         </button>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <!-- 子選單的 div ********** -->

@@ -40,8 +40,8 @@
 
         .popupImage {
             width: 100%;
-            max-width: 100;
-            max-height: 100;
+            max-width: 500;
+            max-height: 500;
             object-fit: cover;
         }
     </style>
@@ -50,15 +50,55 @@
 <!-- MENU BAR -->
 <nav class="navbar navbar-expand-lg position-absolute">
     <div class="container">
-        {% if request.user.is_authenticated %}
-            <a href="\index" class="navbar-brand"> 地圖協作：{{ user_name }}</a>
-        {% else %}
-            <a href="\index" class="navbar-brand">地圖協作：訪客</a>
-        {% endif %}
-        <a href="\index" class="nav-link smoothScroll">
-            <i class="fa fa-backward" aria-hidden="true"></i>
-            回首頁
+        <a class="navbar-brand" href="/">
+            <i class="fa fa-globe"></i>
+            <span>政大VR地圖</span>
         </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a href="/map" class="nav-link smoothScroll">
+                        <i class="fa fa-map"></i>
+                        地圖
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="\blog" class="nav-link">
+                        <i class="fa fa-rss-square"></i>
+                        點位圖鑒
+                    </a>
+                </li>
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item dropdown">  <!-- 加上 dropdown, 表示擁有下一層收合展開的子選單 ********** -->
+                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            管理
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <!-- 子選單的 div ********** -->
+                            <a class="dropdown-item" href="\add">新增點位</a>
+                            <a class="dropdown-item" href="\user_blog">點位管理</a>
+                            <a class="dropdown-item" href="\logout" class="nav-link contact">登出</a>
+                        </div>
+                    </li>
+                {% endif %}
+                <!-- <li class="nav-item">
+                    {% if request.user.is_authenticated %}
+
+                    {% else %}
+                        <a href="/login" class="nav-link contact">登入</a>
+                    {% endif %}
+
+                </li> -->
+            </ul>
+        </div>
     </div>
 </nav>
 
@@ -109,9 +149,19 @@
 4. Copy only URL and paste it within the src="" field below
 -->
 
-
+<script src="https://storage.googleapis.com/vrview/2.0/build/vrview.min.js"></script>
 <script>
-
+    window.addEventListener('load', onVrViewLoad)
+    function onVrViewLoad() {
+        // Selector '#vrview' finds element with id 'vrview'.
+        new VRView.Player('#vrview', {
+            width: "100%",
+            height: "100%",
+            image: '{{ item.purl }}',
+        });
+    }
+</script>
+<script>
     var osm = new L.OSM.Mapnik();
     var nlscmaps = [
         new L.NLSC.PHOTO2({opacity: 0.7}),
@@ -160,20 +210,21 @@
         .addControl(new L.Control.Layers(baseMaps, overlayMaps));
 
     {% for item in all %}  //逐筆建立地標
-        {% if item.type == "建屋"%}
-            var use_icon = house_icon;
-        {% elif item.type == "植物"%}
-            var use_icon = plant_icon;
-        {% elif item.type == "動物"%}
-            var use_icon = animal_icon;
-        {% else %}
-            var use_icon = default_icon;
-        {% endif%}
-        var marker = L.marker([{{ item.lat }}, {{ item.lon }}], {icon: use_icon}).addTo(map);
-        marker.bindPopup("<strong>{{ item.title }}</strong> <br>種類：{{ item.type }} <br>{{ item.content|slice:":10" }}... <br> 發佈者： {{ item.username }}。 <br> 日期： {{ item.create_at|date:"Y / m / d" }}。<br> <img src='{{ item.purl }}' class=popupImage>").openPopup();
+        // {% if item.type == "建屋"%}
+        //     var use_icon = house_icon;
+        // {% elif item.type == "植物"%}
+        //     var use_icon = plant_icon;
+        // {% elif item.type == "動物"%}
+        //     var use_icon = animal_icon;
+        // {% else %}
+        //     var use_icon = default_icon;
+        // {% endif%}
+        var marker = L.marker([{{ item.lat }}, {{ item.lon }}]).addTo(map);
+        marker.bindPopup("<strong>{{ item.title }}</strong> <br>種類：{{ item.type }} <br>{{ item.content|slice:":10" }} 。 <br> 日期： {{ item.create_at|date:"Y / m / d" }}。<br> <div id='vrview'></div>").openPopup();
     {% endfor %}
-
+    
 </script>
+
 
 <!-- SCRIPTS -->
 <script src="{% static 'js/jquery.min.js' %}"></script>
