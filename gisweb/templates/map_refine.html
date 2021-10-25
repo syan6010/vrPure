@@ -1,10 +1,8 @@
 <html>
 <head>
     <title>NLSC地圖協作</title>
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css"/>
-    <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="description" content="">
@@ -13,6 +11,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     {% load static %}
+    <link rel="stylesheet" href="{% static 'css/leaflet.css'%}"/>
+    <script src="{% static 'js/leaflet.js'%}"></script>
+
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/aos.css' %}">
@@ -150,7 +151,7 @@
 -->
 
 <script src="https://storage.googleapis.com/vrview/2.0/build/vrview.min.js"></script>
-<script>
+<!-- <script>
     window.addEventListener('load', onVrViewLoad)
     function onVrViewLoad() {
         // Selector '#vrview' finds element with id 'vrview'.
@@ -160,7 +161,7 @@
             image: '{{ item.purl }}',
         });
     }
-</script>
+</script> -->
 <script>
     var osm = new L.OSM.Mapnik();
     var nlscmaps = [
@@ -220,7 +221,7 @@
         //     var use_icon = default_icon;
         // {% endif%}
         var marker = L.marker([{{ item.lat }}, {{ item.lon }}]).addTo(map);
-        marker.bindPopup("<strong>{{ item.title }}</strong> <br>種類：{{ item.type }} <br>{{ item.content|slice:":10" }} 。 <br> 日期： {{ item.create_at|date:"Y / m / d" }}。<br> <div id='vrview'></div>").openPopup();
+        marker.bindPopup("<strong>{{ item.title }}</strong> <br>種類：{{ item.type }} <br>{{ item.content|slice:":10" }} 。 <br> 日期： {{ item.create_at|date:"Y / m / d" }}。<br> <a href='vrtest/{{item.id}}'><img src='{{ item.purl }}' class=popupImage></a>").openPopup();
     {% endfor %}
     
 </script>

@@ -206,3 +206,8 @@ def user_blog(request):
     user_name = request.user.username
     all = imgData.objects.filter(username="{}".format(user_name))
     return render(request, "user_blog.html", locals())
+
+
+def vrtest(request, editid=None):
+    item = imgData.objects.get(id=editid)
+    return render(request, "vrtest.html", locals())

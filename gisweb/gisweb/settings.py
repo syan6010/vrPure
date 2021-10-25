@@ -26,7 +26,7 @@ SECRET_KEY = '%n=y*m$fa5kpe!t&f*(ms+c8=5d)ku4sxdk^e##k-u)6on#wan'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*", ]
+
 
 
 # Application definition
@@ -38,13 +38,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'nccu_gis_app',
     'ckeditor',
     'corsheaders',
+    'werkzeug_debugger_runserver',
     'django_extensions',
+    'nccu_gis_app',
 ]
 
+
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,21 +57,20 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
+
 ]
+
+
+ALLOWED_HOSTS=['*']
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_HEADERS = ['*']
+
 
 ROOT_URLCONF = 'gisweb.urls'
 
-CORS_ORIGIN_ALLOW_ALL = True  # 允許所有跨站請求, 且whitelist不會被使用
 
-CORS_ALLOWED_ORIGINS = [
-    "https://example.com",
-    "https://sub.example.com",
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-    "http://192.168.186.172:80",
-]
 
 TEMPLATES = [
     {
@@ -96,6 +100,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
 
 
 # Password validation
@@ -142,3 +148,4 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
