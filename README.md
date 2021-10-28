@@ -38,6 +38,11 @@
    python manage.py runserver
     ```
 
+    如果是https的時候
+    ```shell
+    python manage.py runserver_plus --cert server.crt 0.0.0.0:8000
+    ```
+
 
 ## 功能介紹
 **- 地圖功能（map.html）**

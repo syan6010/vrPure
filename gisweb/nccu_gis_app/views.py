@@ -211,3 +211,5 @@ def user_blog(request):
 def vrtest(request, editid=None):
     item = imgData.objects.get(id=editid)
     return render(request, "vrtest.html", locals())
+
+
